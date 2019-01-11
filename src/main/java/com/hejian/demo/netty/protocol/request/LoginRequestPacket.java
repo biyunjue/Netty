@@ -1,5 +1,6 @@
-package com.hejian.demo.netty.protocol.command;
+package com.hejian.demo.netty.protocol.request;
 
+import com.hejian.demo.netty.protocol.Packet;
 import lombok.Data;
 
 import static com.hejian.demo.netty.protocol.command.Command.LOGIN_REQUEST;
@@ -10,7 +11,7 @@ import static com.hejian.demo.netty.protocol.command.Command.LOGIN_REQUEST;
  **/
 @Data
 public class LoginRequestPacket extends Packet {
-    private Integer userId;
+    private String userId;
 
     private String username;
 
