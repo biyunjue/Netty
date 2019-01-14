@@ -1,7 +1,9 @@
 package com.yunfy.demo.netty.protocol;
 
 import com.yunfy.demo.netty.protocol.request.LoginRequestPacket;
+import com.yunfy.demo.netty.protocol.request.MessageRequestPacket;
 import com.yunfy.demo.netty.protocol.response.LoginResponsePacket;
+import com.yunfy.demo.netty.protocol.response.MessageResponsePacket;
 import com.yunfy.demo.netty.serialize.Serializer;
 import com.yunfy.demo.netty.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
@@ -10,8 +12,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yunfy.demo.netty.protocol.command.Command.LOGIN_REQUEST;
-import static com.yunfy.demo.netty.protocol.command.Command.LOGIN_RESPONSE;
+import static com.yunfy.demo.netty.protocol.command.Command.*;
 
 /**
  * @author yunfy
@@ -35,6 +36,8 @@ public class PacketCodeC {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
