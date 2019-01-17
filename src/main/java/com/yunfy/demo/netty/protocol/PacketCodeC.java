@@ -7,7 +7,6 @@ import com.yunfy.demo.netty.protocol.response.MessageResponsePacket;
 import com.yunfy.demo.netty.serialize.Serializer;
 import com.yunfy.demo.netty.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,9 +49,7 @@ public class PacketCodeC {
      * @param packet
      * @return
      */
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
-        // 1. 创建 ByteBuf 对象
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
+    public void encode(ByteBuf byteBuf, Packet packet) {
         // 2. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
         // 3. 实际编码过程
@@ -68,7 +65,6 @@ public class PacketCodeC {
         byteBuf.writeInt(bytes.length);
         // 实际数据
         byteBuf.writeBytes(bytes);
-        return byteBuf;
     }
 
     /**

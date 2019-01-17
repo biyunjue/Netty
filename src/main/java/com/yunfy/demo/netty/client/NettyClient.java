@@ -1,10 +1,12 @@
 package com.yunfy.demo.netty.client;
 
-import com.yunfy.demo.netty.protocol.PacketCodeC;
+import com.yunfy.demo.netty.client.handler.LoginResponseHandler;
+import com.yunfy.demo.netty.client.handler.MessageResponseHandler;
+import com.yunfy.demo.netty.codec.PacketDecoder;
+import com.yunfy.demo.netty.codec.PacketEncoder;
 import com.yunfy.demo.netty.protocol.request.MessageRequestPacket;
 import com.yunfy.demo.netty.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -36,7 +38,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel channel) {
-                        channel.pipeline().addLast(new ClientHandler());
+                        channel.pipeline().addLast(new PacketDecoder());
+                        channel.pipeline().addLast(new LoginResponseHandler());
+                        channel.pipeline().addLast(new MessageResponseHandler());
+                        channel.pipeline().addLast(new PacketEncoder());
                     }
                 });
         connect(bootstrap, HOST, PORT, MAX_RETRY);
@@ -45,7 +50,7 @@ public class NettyClient {
     private static void connect(Bootstrap bootstrap, String host, int port, int retry) {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
-                System.out.println(new Date() + ": 连接成功!");
+                System.out.println(new Date() + ": 连接成功，启动控制台线程……");
                 Channel channel = ((ChannelFuture) future).channel();
                 // 连接成功之后，启动控制台线程
                 startConsoleThread(channel);
@@ -70,11 +75,7 @@ public class NettyClient {
                     System.out.println("输入消息发送至服务端: ");
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
-
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), packet);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(new MessageRequestPacket(line));
                 }
             }
         }).start();

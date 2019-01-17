@@ -1,12 +1,10 @@
 package com.yunfy.demo.netty.server;
 
 
-import com.yunfy.demo.netty.server.handler.inbound.InBoundHandlerA;
-import com.yunfy.demo.netty.server.handler.inbound.InBoundHandlerB;
-import com.yunfy.demo.netty.server.handler.inbound.InBoundHandlerC;
-import com.yunfy.demo.netty.server.handler.outbound.OutBoundHandlerA;
-import com.yunfy.demo.netty.server.handler.outbound.OutBoundHandlerB;
-import com.yunfy.demo.netty.server.handler.outbound.OutBoundHandlerC;
+import com.yunfy.demo.netty.codec.PacketDecoder;
+import com.yunfy.demo.netty.codec.PacketEncoder;
+import com.yunfy.demo.netty.server.handler.LoginRequestHandler;
+import com.yunfy.demo.netty.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -41,16 +39,11 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
-                    protected void initChannel(NioSocketChannel nioSocketChannel) {
-                        // inBound，处理读数据的逻辑链
-                        nioSocketChannel.pipeline().addLast(new InBoundHandlerA());
-                        nioSocketChannel.pipeline().addLast(new InBoundHandlerB());
-                        nioSocketChannel.pipeline().addLast(new InBoundHandlerC());
-
-                        // outBound，处理写数据的逻辑链
-                        nioSocketChannel.pipeline().addLast(new OutBoundHandlerA());
-                        nioSocketChannel.pipeline().addLast(new OutBoundHandlerB());
-                        nioSocketChannel.pipeline().addLast(new OutBoundHandlerC());
+                    protected void initChannel(NioSocketChannel ch) {
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginRequestHandler());
+                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
