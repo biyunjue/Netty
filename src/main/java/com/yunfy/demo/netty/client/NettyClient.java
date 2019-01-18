@@ -4,6 +4,7 @@ import com.yunfy.demo.netty.client.handler.LoginResponseHandler;
 import com.yunfy.demo.netty.client.handler.MessageResponseHandler;
 import com.yunfy.demo.netty.codec.PacketDecoder;
 import com.yunfy.demo.netty.codec.PacketEncoder;
+import com.yunfy.demo.netty.codec.Spliter;
 import com.yunfy.demo.netty.protocol.request.MessageRequestPacket;
 import com.yunfy.demo.netty.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -38,6 +39,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel channel) {
+                        channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(new PacketDecoder());
                         channel.pipeline().addLast(new LoginResponseHandler());
                         channel.pipeline().addLast(new MessageResponseHandler());

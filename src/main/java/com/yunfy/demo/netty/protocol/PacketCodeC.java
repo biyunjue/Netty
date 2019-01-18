@@ -19,7 +19,7 @@ import static com.yunfy.demo.netty.protocol.command.Command.*;
  **/
 public class PacketCodeC {
 
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
     public static final PacketCodeC INSTANCE = new PacketCodeC();
     /**
      * 存储所有的命令类型及对应的类
