@@ -4,6 +4,7 @@ package com.yunfy.demo.netty.server;
 import com.yunfy.demo.netty.codec.PacketDecoder;
 import com.yunfy.demo.netty.codec.PacketEncoder;
 import com.yunfy.demo.netty.codec.Spliter;
+import com.yunfy.demo.netty.server.handler.LifeCyCleTestHandler;
 import com.yunfy.demo.netty.server.handler.LoginRequestHandler;
 import com.yunfy.demo.netty.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -41,6 +42,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel channel) {
+                        channel.pipeline().addLast(new LifeCyCleTestHandler());
                         channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(new PacketDecoder());
                         channel.pipeline().addLast(new LoginRequestHandler());
