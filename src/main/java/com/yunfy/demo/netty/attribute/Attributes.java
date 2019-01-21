@@ -1,5 +1,6 @@
 package com.yunfy.demo.netty.attribute;
 
+import com.yunfy.demo.netty.session.Session;
 import io.netty.util.AttributeKey;
 
 /**
@@ -8,7 +9,7 @@ import io.netty.util.AttributeKey;
  **/
 public interface Attributes {
     /**
-     * 定义状态
+     * 登录的session
      */
-    AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
+    AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
 }

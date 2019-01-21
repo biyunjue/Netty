@@ -18,8 +18,7 @@ public class PacketCodeCTest {
         Serializer serializer = new JSONSerializer();
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
         loginRequestPacket.setVersion(((byte) 1));
-        loginRequestPacket.setUserId("123");
-        loginRequestPacket.setUsername("zhangsan");
+        loginRequestPacket.setUserName("zhangsan");
         loginRequestPacket.setPassword("password");
 
         PacketCodeC packetCodeC = PacketCodeC.INSTANCE;

@@ -2,11 +2,13 @@ package com.yunfy.demo.netty.server.handler;
 
 import com.yunfy.demo.netty.protocol.request.LoginRequestPacket;
 import com.yunfy.demo.netty.protocol.response.LoginResponsePacket;
-import com.yunfy.demo.netty.util.LoginUtil;
+import com.yunfy.demo.netty.session.Session;
+import com.yunfy.demo.netty.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author yunfy
@@ -26,14 +28,17 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket loginRequestPacket) {
-        System.out.println(new Date() + ": 收到客户端登录请求……");
         // 登录流程
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
+        loginResponsePacket.setUserName(loginRequestPacket.getUserName());
+
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            System.out.println(new Date() + ": 登录成功!");
-            LoginUtil.markAsLogin(ctx.channel());
+            String userId = randomUserId();
+            loginResponsePacket.setUserId(userId);
+            System.out.println("[" + loginRequestPacket.getUserName() + "]登录成功");
+            SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUserName()), ctx.channel());
         } else {
             loginResponsePacket.setReason("账号密码校验失败");
             loginResponsePacket.setSuccess(false);
@@ -41,6 +46,25 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         }
         // 登录响应
         ctx.channel().writeAndFlush(loginResponsePacket);
+    }
+
+    /**
+     * 断开时调用
+     *
+     * @param ctx
+     */
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        SessionUtil.unBindSession(ctx.channel());
+    }
+
+    /**
+     * 返回UserId
+     *
+     * @return
+     */
+    private static String randomUserId() {
+        return UUID.randomUUID().toString().split("-")[0];
     }
 
 
