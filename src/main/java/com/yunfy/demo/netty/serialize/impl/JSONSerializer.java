@@ -2,7 +2,7 @@ package com.yunfy.demo.netty.serialize.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.yunfy.demo.netty.serialize.Serializer;
-import com.yunfy.demo.netty.serialize.SerializerAlogrithm;
+import com.yunfy.demo.netty.serialize.SerializerAlgorithm;
 
 /**
  * @author yunfy
@@ -14,8 +14,8 @@ public class JSONSerializer implements Serializer {
      * 获取具体的序列化算法标识
      */
     @Override
-    public byte getSerializerAlogrithm() {
-        return SerializerAlogrithm.JSON;
+    public byte getSerializerAlgorithm() {
+        return SerializerAlgorithm.JSON;
     }
 
     /**

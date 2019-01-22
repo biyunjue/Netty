@@ -4,9 +4,7 @@ package com.yunfy.demo.netty.server;
 import com.yunfy.demo.netty.codec.PacketDecoder;
 import com.yunfy.demo.netty.codec.PacketEncoder;
 import com.yunfy.demo.netty.codec.Spliter;
-import com.yunfy.demo.netty.server.handler.AuthHandler;
-import com.yunfy.demo.netty.server.handler.LoginRequestHandler;
-import com.yunfy.demo.netty.server.handler.MessageRequestHandler;
+import com.yunfy.demo.netty.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -47,6 +45,8 @@ public class NettyServer {
                         channel.pipeline().addLast(new LoginRequestHandler());
                         channel.pipeline().addLast(new AuthHandler());
                         channel.pipeline().addLast(new MessageRequestHandler());
+                        channel.pipeline().addLast(new CreateGroupRequestHandler());
+                        channel.pipeline().addLast(new LogoutRequestHandler());
                         channel.pipeline().addLast(new PacketEncoder());
                     }
                 });

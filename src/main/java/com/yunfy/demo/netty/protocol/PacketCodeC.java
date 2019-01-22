@@ -1,8 +1,12 @@
 package com.yunfy.demo.netty.protocol;
 
+import com.yunfy.demo.netty.protocol.request.CreateGroupRequestPacket;
 import com.yunfy.demo.netty.protocol.request.LoginRequestPacket;
+import com.yunfy.demo.netty.protocol.request.LogoutRequestPacket;
 import com.yunfy.demo.netty.protocol.request.MessageRequestPacket;
+import com.yunfy.demo.netty.protocol.response.CreateGroupResponsePacket;
 import com.yunfy.demo.netty.protocol.response.LoginResponsePacket;
+import com.yunfy.demo.netty.protocol.response.LogoutResponsePacket;
 import com.yunfy.demo.netty.protocol.response.MessageResponsePacket;
 import com.yunfy.demo.netty.serialize.Serializer;
 import com.yunfy.demo.netty.serialize.impl.JSONSerializer;
@@ -37,10 +41,14 @@ public class PacketCodeC {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
-        serializerMap.put(serializer.getSerializerAlogrithm(), serializer);
+        serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
     /**
@@ -58,7 +66,7 @@ public class PacketCodeC {
         // 协议版本
         byteBuf.writeByte(packet.getVersion());
         // 序列化方式
-        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
         // 指令
         byteBuf.writeByte(packet.getCommand());
         // 数据长度

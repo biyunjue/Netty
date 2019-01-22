@@ -15,7 +15,7 @@ public interface Serializer {
     /**
      * 获取具体的序列化算法标识
      */
-    byte getSerializerAlogrithm();
+    byte getSerializerAlgorithm();
 
     /**
      * java 对象转换成二进制

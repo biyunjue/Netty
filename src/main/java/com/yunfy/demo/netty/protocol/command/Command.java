@@ -21,4 +21,24 @@ public interface Command {
      * 消息响应
      */
     Byte MESSAGE_RESPONSE = 4;
+
+    /**
+     * 退出请求
+     */
+    Byte LOGOUT_REQUEST = 5;
+
+    /**
+     * 退出响应
+     */
+    Byte LOGOUT_RESPONSE = 6;
+
+    /**
+     * 建立群组请求
+     */
+    Byte CREATE_GROUP_REQUEST = 7;
+
+    /**
+     * 建立群组响应
+     */
+    Byte CREATE_GROUP_RESPONSE = 8;
 }

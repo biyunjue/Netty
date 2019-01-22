@@ -3,12 +3,12 @@ package com.yunfy.demo.netty.server.handler;
 import com.yunfy.demo.netty.protocol.request.LoginRequestPacket;
 import com.yunfy.demo.netty.protocol.response.LoginResponsePacket;
 import com.yunfy.demo.netty.session.Session;
+import com.yunfy.demo.netty.util.IDUtil;
 import com.yunfy.demo.netty.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * @author yunfy
@@ -35,7 +35,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            String userId = randomUserId();
+            String userId = IDUtil.randomId();
             loginResponsePacket.setUserId(userId);
             System.out.println("[" + loginRequestPacket.getUserName() + "]登录成功");
             SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUserName()), ctx.channel());
@@ -57,16 +57,6 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     public void channelInactive(ChannelHandlerContext ctx) {
         SessionUtil.unBindSession(ctx.channel());
     }
-
-    /**
-     * 返回UserId
-     *
-     * @return
-     */
-    private static String randomUserId() {
-        return UUID.randomUUID().toString().split("-")[0];
-    }
-
 
     /**
      * 校验请求
