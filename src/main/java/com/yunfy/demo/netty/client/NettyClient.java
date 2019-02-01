@@ -2,10 +2,7 @@ package com.yunfy.demo.netty.client;
 
 import com.yunfy.demo.netty.client.console.ConsoleCommandManager;
 import com.yunfy.demo.netty.client.console.LoginConsoleCommand;
-import com.yunfy.demo.netty.client.handler.CreateGroupResponseHandler;
-import com.yunfy.demo.netty.client.handler.LoginResponseHandler;
-import com.yunfy.demo.netty.client.handler.LogoutResponseHandler;
-import com.yunfy.demo.netty.client.handler.MessageResponseHandler;
+import com.yunfy.demo.netty.client.handler.*;
 import com.yunfy.demo.netty.codec.PacketDecoder;
 import com.yunfy.demo.netty.codec.PacketEncoder;
 import com.yunfy.demo.netty.codec.Spliter;
@@ -49,10 +46,20 @@ public class NettyClient {
                     protected void initChannel(SocketChannel channel) {
                         channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(new PacketDecoder());
+                        // 登录响应处理器
                         channel.pipeline().addLast(new LoginResponseHandler());
-                        channel.pipeline().addLast(new LogoutResponseHandler());
+                        // 收消息处理器
                         channel.pipeline().addLast(new MessageResponseHandler());
+                        // 创建群响应处理器
                         channel.pipeline().addLast(new CreateGroupResponseHandler());
+                        // 加群响应处理器
+                        channel.pipeline().addLast(new JoinGroupResponseHandler());
+                        // 退群响应处理器
+                        channel.pipeline().addLast(new QuitGroupResponseHandler());
+                        // 获取群成员响应处理器
+                        channel.pipeline().addLast(new ListGroupMembersResponseHandler());
+                        // 登出响应处理器
+                        channel.pipeline().addLast(new LogoutResponseHandler());
                         channel.pipeline().addLast(new PacketEncoder());
                     }
                 });
