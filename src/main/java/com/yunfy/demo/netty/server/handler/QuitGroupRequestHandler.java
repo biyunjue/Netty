@@ -3,6 +3,7 @@ package com.yunfy.demo.netty.server.handler;
 import com.yunfy.demo.netty.protocol.request.QuitGroupRequestPacket;
 import com.yunfy.demo.netty.protocol.response.QuitGroupResponsePacket;
 import com.yunfy.demo.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -11,7 +12,14 @@ import io.netty.channel.group.ChannelGroup;
  * @author yunfy
  * @create 2019-02-01 15:40
  **/
+@ChannelHandler.Sharable
 public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGroupRequestPacket> {
+    public static final QuitGroupRequestHandler INSTANCE = new QuitGroupRequestHandler();
+
+    private QuitGroupRequestHandler() {
+
+    }
+
     /**
      * <strong>Please keep in mind that this method will be renamed to
      * {@code messageReceived(ChannelHandlerContext, I)} in 5.0.</strong>
@@ -39,7 +47,6 @@ public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGro
             responsePacket.setSuccess(false);
             responsePacket.setReason(groupId + "群不存在");
         }
-        ctx.channel().writeAndFlush(responsePacket);
-
+        ctx.writeAndFlush(responsePacket);
     }
 }

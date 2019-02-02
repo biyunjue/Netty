@@ -5,6 +5,7 @@ import com.yunfy.demo.netty.protocol.response.LoginResponsePacket;
 import com.yunfy.demo.netty.session.Session;
 import com.yunfy.demo.netty.util.IDUtil;
 import com.yunfy.demo.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -14,7 +15,13 @@ import java.util.Date;
  * @author yunfy
  * @create 2019-01-17 21:25
  **/
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    protected LoginRequestHandler() {
+    }
 
     /**
      * <strong>Please keep in mind that this method will be renamed to
@@ -45,7 +52,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             System.out.println(new Date() + ": 登录失败!");
         }
         // 登录响应
-        ctx.channel().writeAndFlush(loginResponsePacket);
+        ctx.writeAndFlush(loginResponsePacket);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.yunfy.demo.netty.server.handler;
 import com.yunfy.demo.netty.protocol.request.JoinGroupRequestPacket;
 import com.yunfy.demo.netty.protocol.response.JoinGroupResponsePacket;
 import com.yunfy.demo.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -11,7 +12,15 @@ import io.netty.channel.group.ChannelGroup;
  * @author yunfy
  * @create 2019-02-01 15:26
  **/
+@ChannelHandler.Sharable
 public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
+
+    public static final JoinGroupRequestHandler INSTANCE = new JoinGroupRequestHandler();
+
+    private JoinGroupRequestHandler() {
+
+    }
+
     /**
      * <strong>Please keep in mind that this method will be renamed to
      * {@code messageReceived(ChannelHandlerContext, I)} in 5.0.</strong>
@@ -39,6 +48,6 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
             responsePacket.setSuccess(true);
             responsePacket.setGroupId(groupId);
         }
-        ctx.channel().writeAndFlush(responsePacket);
+        ctx.writeAndFlush(responsePacket);
     }
 }

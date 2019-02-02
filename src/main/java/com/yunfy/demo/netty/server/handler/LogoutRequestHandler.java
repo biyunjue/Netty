@@ -3,6 +3,7 @@ package com.yunfy.demo.netty.server.handler;
 import com.yunfy.demo.netty.protocol.request.LogoutRequestPacket;
 import com.yunfy.demo.netty.protocol.response.LogoutResponsePacket;
 import com.yunfy.demo.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -10,7 +11,16 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author yunfy
  * @create 2019-01-22 22:18
  **/
+@ChannelHandler.Sharable
 public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequestPacket> {
+
+    public static final LogoutRequestHandler INSTANCE = new LogoutRequestHandler();
+
+    private LogoutRequestHandler() {
+
+    }
+
+
     /**
      * <strong>Please keep in mind that this method will be renamed to
      * {@code messageReceived(ChannelHandlerContext, I)} in 5.0.</strong>
@@ -26,6 +36,6 @@ public class LogoutRequestHandler extends SimpleChannelInboundHandler<LogoutRequ
         SessionUtil.unBindSession(ctx.channel());
         LogoutResponsePacket logoutResponsePacket = new LogoutResponsePacket();
         logoutResponsePacket.setSuccess(true);
-        ctx.channel().writeAndFlush(logoutResponsePacket);
+        ctx.writeAndFlush(logoutResponsePacket);
     }
 }

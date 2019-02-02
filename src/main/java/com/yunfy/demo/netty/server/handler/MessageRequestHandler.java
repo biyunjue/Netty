@@ -5,6 +5,7 @@ import com.yunfy.demo.netty.protocol.response.MessageResponsePacket;
 import com.yunfy.demo.netty.session.Session;
 import com.yunfy.demo.netty.util.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -12,7 +13,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author yunfy
  * @create 2019-01-17 21:35
  **/
+@ChannelHandler.Sharable
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
+
+    public static final MessageRequestHandler INSTANCE = new MessageRequestHandler();
+
+    private MessageRequestHandler() {
+
+    }
+
     /**
      * <strong>Please keep in mind that this method will be renamed to
      * {@code messageReceived(ChannelHandlerContext, I)} in 5.0.</strong>

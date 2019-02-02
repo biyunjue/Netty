@@ -1,6 +1,7 @@
 package com.yunfy.demo.netty.server.handler;
 
 import com.yunfy.demo.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -10,7 +11,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  * @author yunfy
  * @create 2019-01-20 22:18
  **/
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+    public static final AuthHandler INSTANCE = new AuthHandler();
+
+    private AuthHandler() {
+
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
