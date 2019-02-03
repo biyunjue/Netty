@@ -3,7 +3,11 @@ package com.yunfy.demo.netty.server;
 
 import com.yunfy.demo.netty.codec.PacketCodecHandler;
 import com.yunfy.demo.netty.codec.Spliter;
-import com.yunfy.demo.netty.server.handler.*;
+import com.yunfy.demo.netty.handler.IMIdleStateHandler;
+import com.yunfy.demo.netty.server.handler.AuthHandler;
+import com.yunfy.demo.netty.server.handler.HeartBeatRequestHandler;
+import com.yunfy.demo.netty.server.handler.IMHandler;
+import com.yunfy.demo.netty.server.handler.LoginRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -39,9 +43,12 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel channel) {
+                        // 空闲检测
+                        channel.pipeline().addLast(new IMIdleStateHandler());
                         channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         channel.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        channel.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         channel.pipeline().addLast(AuthHandler.INSTANCE);
                         channel.pipeline().addLast(IMHandler.INSTANCE);
                     }

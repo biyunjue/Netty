@@ -6,6 +6,7 @@ import com.yunfy.demo.netty.client.handler.*;
 import com.yunfy.demo.netty.codec.PacketDecoder;
 import com.yunfy.demo.netty.codec.PacketEncoder;
 import com.yunfy.demo.netty.codec.Spliter;
+import com.yunfy.demo.netty.handler.IMIdleStateHandler;
 import com.yunfy.demo.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -44,6 +45,8 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel channel) {
+                        // 空闲检测
+                        channel.pipeline().addLast(new IMIdleStateHandler());
                         channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(new PacketDecoder());
                         // 登录响应处理器
@@ -63,6 +66,8 @@ public class NettyClient {
                         // 登出响应处理器
                         channel.pipeline().addLast(new LogoutResponseHandler());
                         channel.pipeline().addLast(new PacketEncoder());
+                        // 心跳定时器
+                        channel.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 });
         connect(bootstrap, HOST, PORT, MAX_RETRY);
